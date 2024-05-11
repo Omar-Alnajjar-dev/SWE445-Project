@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 let username = "john";
-let isPro = true;
+let isAdmin = true;
 let isBlocked = true;
 
 export const getSession = async () => {
@@ -19,7 +19,7 @@ export const getSession = async () => {
 
   // CHECK THE USER IN THE DB
   session.isBlocked = isBlocked;
-  session.isPro = isPro;
+  session.isAdmin = isAdmin;
 
   return session;
 };
@@ -42,11 +42,11 @@ export const login = async (
 
   session.userId = "1";
   session.username = formUsername;
-  session.isPro = isPro;
+  session.isAdmin = isAdmin;
   session.isLoggedIn = true;
 
   await session.save();
-  redirect("/");
+  redirect("/dashboard");
 };
 
 export const logout = async () => {
@@ -85,8 +85,8 @@ export const register = async (
 export const changePremium = async () => {
   const session = await getSession();
 
-  isPro = !session.isPro;
-  session.isPro = isPro;
+  isAdmin = !session.isAdmin;
+  session.isAdmin = isAdmin;
   await session.save();
   revalidatePath("/profile");
 };
