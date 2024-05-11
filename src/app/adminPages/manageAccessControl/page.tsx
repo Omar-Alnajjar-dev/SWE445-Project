@@ -9,12 +9,12 @@ const PremiumPage = async () => {
     redirect("/");
   }
 
-  if (!session.isPro) {
+  if (!session.isAdmin) {
     return (
-      <div className="notPremium">
-        <h1>Only premium users can see the content!</h1>
-        <Link href="/profile">
-          Go to the profile page to upgrade to premium
+      <div className="notAdmin">
+        <h1>Only Admin users can see the content!</h1>
+        <Link href="/dashboard">
+          Go Back to the Dashboard page
         </Link>
       </div>
     );
