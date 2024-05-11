@@ -25,13 +25,13 @@ export const getSession = async () => {
 };
 
 export const login = async (
-  prevState: { error: undefined | string },
-  formData: FormData
+  name:any,
+  password:any
 ) => {
   const session = await getSession();
 
-  const formUsername = formData.get("username") as string;
-  const formPassword = formData.get("password") as string;
+  const formUsername = name as string;
+  const formPassword = password as string;
 
   // CHECK USER IN THE DB
   // const user = await db.getUser({username,password})
@@ -40,13 +40,29 @@ export const login = async (
     return { error: "Wrong Credentials!" };
   }
 
+  const otp = Math.round(Math.random() * 1000)
+  return { otp: otp};
+};
+
+export const OTP = async (
+  name:any,
+  password:any,
+) => {
+  const session = await getSession();
+
+  const formUsername = name as string;
+  const formPassword = password as string;
+
+  // CHECK USER IN THE DB
+  // const user = await db.getUser({username,password})
+
   session.userId = "1";
   session.username = formUsername;
   session.isAdmin = isAdmin;
   session.isLoggedIn = true;
 
   await session.save();
-  redirect("/dashboard");
+  redirect('/dashboard')
 };
 
 export const logout = async () => {
