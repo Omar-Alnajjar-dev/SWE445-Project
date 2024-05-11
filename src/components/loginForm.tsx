@@ -19,7 +19,7 @@ const LoginForm = () => {
       OTP(username, password);
     }
     else {
-      setMessage("Wrong OTP, The OTP is " + state?.otp + " Please Enter The Correct OTP");
+      setMessage("Wrong OTP!");
     };
   };
 

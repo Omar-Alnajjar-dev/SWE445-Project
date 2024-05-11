@@ -50,6 +50,7 @@ export const login = async (
   }
 
   const otp = Math.round(Math.random() * 100000).toString().padStart(6, "0");
+  console.log("OTP: ", otp);
   return { otp: otp };
 };
 
