@@ -5,8 +5,8 @@ import { getIronSession } from "iron-session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+const { getUsers } = require('@/dbService');
 
-let username = "john";
 let isAdmin = true;
 let isBlocked = true;
 
@@ -29,12 +29,20 @@ export const login = async (
   formData: FormData
 ) => {
   const session = await getSession();
+  console.log(formData);
 
   const formUsername = formData.get("username") as string;
   const formPassword = formData.get("password") as string;
 
   // CHECK USER IN THE DB
-  // const user = await db.getUser({username,password})
+  let username = "";
+  const users = await getUsers();
+
+  users.forEach((user: { Username: string; PasswordHash: string }) => {
+    if (user.Username === formUsername && user.PasswordHash === formPassword) {
+      username = user.Username;
+    }
+  });
 
   if (formUsername !== username) {
     return { error: "Wrong Credentials!" };
