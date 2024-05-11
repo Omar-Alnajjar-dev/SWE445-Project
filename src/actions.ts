@@ -25,36 +25,37 @@ export const getSession = async () => {
 };
 
 export const login = async (
-  name:any,
-  password:any
+  name: any,
+  password: any
 ) => {
   const session = await getSession();
-  console.log(formData);
 
   const formUsername = name as string;
   const formPassword = password as string;
 
   // CHECK USER IN THE DB
   let username = "";
+  let hashedPassword = "";
   const users = await getUsers();
 
   users.forEach((user: { Username: string; PasswordHash: string }) => {
     if (user.Username === formUsername && user.PasswordHash === formPassword) {
       username = user.Username;
+      hashedPassword = user.PasswordHash;
     }
   });
 
-  if (formUsername !== username) {
+  if (formUsername !== username || formPassword !== hashedPassword) {
     return { error: "Wrong Credentials!" };
   }
 
   const otp = Math.round(Math.random() * 1000)
-  return { otp: otp};
+  return { otp: otp };
 };
 
 export const OTP = async (
-  name:any,
-  password:any,
+  name: any,
+  password: any,
 ) => {
   const session = await getSession();
 
