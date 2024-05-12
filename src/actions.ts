@@ -5,7 +5,7 @@ import { getIronSession } from "iron-session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-const { getUsers, getUser, isAdmin, getAllPatients } = require('@/dbService');
+const { getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles } = require('@/dbService');
 
 // let isAdmin = true;
 let isBlocked = true;
@@ -102,8 +102,6 @@ export const getPatients = async () => {
   const session = await getSession();
   if (session.isAdmin) {
     const patients = await getAllPatients();
-    console.log("patients were sent")
-    console.log(patients)
     return patients;
   } else {
     console.log("Unauthorized");
@@ -111,6 +109,31 @@ export const getPatients = async () => {
   }
 
 };
+
+export const getUsers = async () => {
+  const session = await getSession();
+  if (session.isAdmin) {
+    const users = await getAllUsers();
+    return users;
+  } else {
+    console.log("Unauthorized");
+    return { error: "Unauthorized" };
+  }
+
+};
+
+export const getUserswithRoles = async () => {
+  const session = await getSession();
+  if (session.isAdmin) {
+    const users = await getAllUserswithRoles();
+    return users;
+  } else {
+    console.log("Unauthorized");
+    return { error: "Unauthorized" };
+  }
+
+};
+
 
 // export const changePremium = async () => {
 //   const session = await getSession();

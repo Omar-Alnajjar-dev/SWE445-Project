@@ -1,6 +1,7 @@
 import { getSession } from "@/actions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import AccessControlTable from "@/components/AccessControlTable";
 
 const ManageAccessControl = async () => {
   const session = await getSession();
@@ -21,14 +22,14 @@ const ManageAccessControl = async () => {
   }
 
   return (
-    <div className="premium">
-      <h1>Welcome to the PremiumPage</h1>
-      <ul>
-        <li>Apple</li>
-        <li>Orange</li>
-        <li>Peach</li>
-      </ul>
-    </div>
+    <>
+      <div className="border p-14 bg-white rounded-3xl p-b-4">
+        <h1 className="text-3xl mb-5">Access Control</h1>
+        <div className="">
+          <AccessControlTable />
+        </div>
+      </div>
+    </>
   );
 };
 

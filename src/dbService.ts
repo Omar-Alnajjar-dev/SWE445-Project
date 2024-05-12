@@ -11,12 +11,19 @@ function connectToDB() {
     });
 }
 
-const getUsers = async () => {
+const getAllUsers = async () => {
     const db = await connectToDB();
     const users = await db.all('SELECT * FROM Persons')
     await db.close();
     return users;
 }
+
+const getAllUserswithRoles = async () => {
+    const db = await connectToDB();
+    const users = await db.all("SELECT  p.PersonID, p.Email, CONCAT(p.FirstName, ' ', COALESCE(p.MiddleName, ''), ' ', p.LastName) AS FullName, r.RoleName FROM Persons p JOIN PersonRoles pr ON p.PersonID = pr.PersonID JOIN Roles r ON pr.RoleID = r.RoleID")
+    await db.close();
+    return users;
+};
 
 const getUser = async (username: string, password: string) => {
     const db = await connectToDB();
@@ -40,4 +47,5 @@ const getAllPatients = async () => {
     return patients;
 }
 
-module.exports = { connectToDB, getUsers, getUser, isAdmin, getAllPatients };
+
+module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles };
