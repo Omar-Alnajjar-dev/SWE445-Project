@@ -1,4 +1,5 @@
-import { changePremium, changeUsername, getSession } from "@/actions";
+import { getSession } from "@/actions";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const DashboardPage = async () => {
@@ -17,8 +18,12 @@ const DashboardPage = async () => {
             <span>You are <b>{session.isAdmin ? "An Admin" : "a Patient"}</b> user</span>
 
             {session.isAdmin && <div className="flex flex-col justify-center items-center m-4">
-                <button className="text-blue-600 border border-blue-600 rounded-lg p-3 m-2 hover:text-white hover:bg-blue-600 active:scale-95">Update Patients Records</button>
-                <button className="text-blue-600 border border-blue-600 rounded-lg p-3 m-2 hover:text-white hover:bg-blue-600 active:scale-95">Manage Access Control</button>
+                <Link href="/adminPages/updatePatients">
+                    <button className="text-blue-600 border border-blue-600 rounded-lg p-3 m-2 hover:text-white hover:bg-blue-600 active:scale-95">Update Patients Records</button>
+                </Link>
+                <Link href="/adminPages/manageAccessControl">
+                    <button className="text-blue-600 border border-blue-600 rounded-lg p-3 m-2 hover:text-white hover:bg-blue-600 active:scale-95">Manage Access Control</button>
+                </Link>
             </div>}
         </div>
     );

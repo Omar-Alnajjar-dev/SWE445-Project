@@ -2,7 +2,7 @@ import { getSession } from "@/actions";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-const PremiumPage = async () => {
+const ManageAccessControl = async () => {
   const session = await getSession();
 
   if (!session.isLoggedIn) {
@@ -32,4 +32,4 @@ const PremiumPage = async () => {
   );
 };
 
-export default PremiumPage;
+export default ManageAccessControl;

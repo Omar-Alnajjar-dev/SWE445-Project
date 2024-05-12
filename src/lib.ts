@@ -4,9 +4,9 @@ export interface SessionData {
   userId?: string;
   username?: string;
   img?: string;
-  isAdmin?: boolean
-  isBlocked?: boolean
-  isLoggedIn: boolean
+  isAdmin?: boolean;
+  isBlocked?: boolean;
+  isLoggedIn: boolean;
 }
 
 export const defaultSession: SessionData = {

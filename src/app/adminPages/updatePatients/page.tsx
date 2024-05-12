@@ -1,8 +1,9 @@
 import { getSession } from "@/actions";
+import PatientsTable from "@/components/PatientsTable";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-const PremiumPage = async () => {
+const UpdatePatients = async () => {
   const session = await getSession();
 
   if (!session.isLoggedIn) {
@@ -20,16 +21,20 @@ const PremiumPage = async () => {
     );
   }
 
+
   return (
-    <div className="premium">
-      <h1>Welcome to the PremiumPage</h1>
-      <ul>
-        <li>Apple</li>
-        <li>Orange</li>
-        <li>Peach</li>
-      </ul>
-    </div>
+    <>
+      <div className="border p-14 bg-white rounded-3xl p-b-4">
+        <h1 className="text-3xl mb-5">Patients Records</h1>
+        <div className="">
+          <PatientsTable />
+        </div>
+      </div>
+    </>
+
+
+
   );
 };
 
-export default PremiumPage;
+export default UpdatePatients;
