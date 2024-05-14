@@ -25,9 +25,9 @@ const getAllUserswithRoles = async () => {
     return users;
 };
 
-const getUser = async (username: string, password: string) => {
+const getUser = async (username: string) => {
     const db = await connectToDB();
-    const user = await db.get('SELECT * FROM Persons WHERE Username = ? AND PasswordHash = ?', [username, password])
+    const user = await db.get('SELECT * FROM Persons WHERE Username = ?', [username])
     await db.close();
     return user;
 }

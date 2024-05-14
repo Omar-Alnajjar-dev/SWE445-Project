@@ -6,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 const { getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRole, getByID, checkUsers, insertUser } = require('@/dbService');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // let isAdmin = true;
 let isBlocked = true;
@@ -33,15 +35,18 @@ export const login = async (
   const formPassword = password as string;
 
   // CHECK USER IN THE DB
-  const user = await getUser(formUsername, formPassword);
-
-  if (user === undefined) {
+  let user = await getUser(formUsername);
+  if (!user) {
     return { error: "Wrong Credentials!" };
   }
-
-  const otp = Math.round(Math.random() * 1000000).toString().padStart(6, "0");
-  console.log("OTP: ", otp);
-  return { otp: otp };
+  const result = await bcrypt.compare(formPassword, user.PasswordHash);
+  if (result) {
+    const otp = Math.round(Math.random() * 1000000).toString().padStart(6, "0");
+    console.log("OTP: ", otp);
+    return { otp: otp };
+  } else {
+    return { error: "Wrong Credentials!" };
+  }
 };
 
 export const OTP = async (
@@ -54,15 +59,22 @@ export const OTP = async (
   const formPassword = password as string;
 
   // CHECK USER IN THE DB
-  const user = await getUser(formUsername, formPassword);
-  const UserIsAdmin = await isAdmin(user.Username) === 1 ? true : false;
-
-  session.userId = user.PersonID;
-  session.username = user.Username;
-  session.isAdmin = UserIsAdmin;
-  session.isLoggedIn = true;
-  await session.save();
-  redirect('/dashboard')
+  let user = await getUser(formUsername);
+  if (!user) {
+    return { error: "Wrong Credentials!" };
+  }
+  const result = await bcrypt.compare(formPassword, user.PasswordHash);
+  if (result) {
+    const UserIsAdmin = await isAdmin(user.Username) === 1 ? true : false;
+    session.userId = user.PersonID;
+    session.username = user.Username;
+    session.isAdmin = UserIsAdmin;
+    session.isLoggedIn = true;
+    await session.save();
+    redirect('/dashboard')
+  } else {
+    return { error: "Wrong Credentials!" };
+  }
 };
 
 export const logout = async () => {
@@ -160,19 +172,21 @@ export const register = async (
 
 
   // INSERT USER INTO DB
-  const insert = await insertUser(
-    formFName,
-    formMName,
-    formLName,
-    formUsername,
-    formEmail,
-    formPassword,
-    formPhoneNumber,
-    formBirthDate,
-    formGender,
-    formAddress
-  );
-  console.log(insert);
+  await bcrypt.hash(formPassword, saltRounds, async function (err: any, hash: string) {
+    // Store hash in your password DB.
+    const insert = await insertUser(
+      formFName,
+      formMName,
+      formLName,
+      formUsername,
+      formEmail,
+      hash,
+      formPhoneNumber,
+      formBirthDate,
+      formGender,
+      formAddress
+    );
+  });
 
   session.username = formUsername;
   session.userId = "1";
