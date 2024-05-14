@@ -25,6 +25,13 @@ const getAllUserswithRoles = async () => {
     return users;
 };
 
+const getAllRoles = async () => {
+    const db = await connectToDB();
+    const roles = await db.all('SELECT * FROM Roles')
+    await db.close();
+    return roles;
+}
+
 const getUser = async (username: string) => {
     const db = await connectToDB();
     const user = await db.get('SELECT * FROM Persons WHERE Username = ?', [username])
@@ -73,4 +80,15 @@ const insertUser = async (FName: string, MName: string, LName: string, Username:
     return true;
 }
 
-module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser };
+const updateRole = async (PersonID: number, RoleID: number) => {
+    const db = await connectToDB();
+    try {
+        await db.run("UPDATE PersonRoles SET RoleID = ? WHERE PersonID = ?", [RoleID, PersonID]);
+    } catch (error) {
+        return error;
+    }
+    await db.close();
+    return true;
+}
+
+module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser, getAllRoles, updateRole };

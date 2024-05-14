@@ -1,11 +1,12 @@
 "use client";
-import { getPatients, getUserswithRoles, login, OTP } from "@/actions";
+import { getUserswithRoles, getRoles, updateRoles } from "@/actions";
 import { useFormState } from "react-dom";
 import { use, useEffect, useState } from "react";
 
 
 const AccessControlTable = () => {
   const [patients, setPatients] = useState<any[]>([]);
+  const [roles, setRoles] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -14,11 +15,24 @@ const AccessControlTable = () => {
   const fetchData = async () => {
     try {
       const patients = await getUserswithRoles();
+      const roles = await getRoles();
+      setRoles(roles);
       setPatients(patients);
     } catch (error) {
       console.error(error);
     }
   };
+  const handleRoleChange = (index: number, value: string) => {
+    setPatients((prevState) => {
+      const newPatients = [...prevState];
+      newPatients[index].RoleName = value;
+      return newPatients;
+    });
+  };
+
+  useEffect(() => {
+    updateRoles(patients, roles);
+  }, [patients]);
 
   return (
     <div>
@@ -38,9 +52,13 @@ const AccessControlTable = () => {
                 <td className="pr-5">{patient.PersonID}</td>
                 <td className="pr-5">{patient.FullName}</td>
                 <td className="pr-5">{patient.Email}</td>
-                <td className="pr-5"><select value={patient.RoleName} name="access" id="access" className="border border-gray-500 rounded-2xl hover:bg-slate-600 hover:text-white">
-                  <option value="Admin">Admin</option>
-                  <option value="Patient">Patient</option>
+                <td className="pr-5"><select value={patient.RoleName} name="access"
+                  id="access"
+                  onChange={(e) => handleRoleChange(index, e.target.value)}
+                  className="border border-gray-500 rounded-2xl hover:bg-slate-600 hover:text-white">
+                  {roles.map((role, index) => (
+                    <option key={index} value={role.RoleName}>{role.RoleName}</option>
+                  ))}
                 </select></td>
               </tr>
             </>

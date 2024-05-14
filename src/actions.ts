@@ -5,7 +5,7 @@ import { getIronSession } from "iron-session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-const { getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser } = require('@/dbService');
+const { getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser, getAllRoles, updateRole } = require('@/dbService');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -235,10 +235,33 @@ export const getUserswithRoles = async () => {
 };
 
 export const getUserByID = async (id: number) => {
-
   const user = await getByID(id);
   return user;
 
+};
+
+export const getRoles = async () => {
+  const session = await getSession();
+  if (session.isAdmin) {
+    const roles = await getAllRoles();
+    return roles;
+  } else {
+    console.log("Unauthorized");
+    return { error: "Unauthorized" };
+  }
+
+}
+
+export const updateRoles = async (users: any, roles: any) => {
+  const session = await getSession();
+  if (session.isAdmin) {
+    users.forEach(async (user: any) => {
+      const result = await updateRole(user.PersonID, roles.find((role: any) => role.RoleName === user.RoleName).RoleID);
+    });
+  } else {
+    console.log("Unauthorized");
+    return { error: "Unauthorized" };
+  }
 };
 
 
