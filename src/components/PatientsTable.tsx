@@ -2,9 +2,12 @@
 import { getPatients, login, OTP } from "@/actions";
 import { useFormState } from "react-dom";
 import { use, useEffect, useState } from "react";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 
 const PatientsTable = () => {
+  const router = useRouter();
   const [patients, setPatients] = useState<any[]>([]);
 
   useEffect(() => {
@@ -21,7 +24,7 @@ const PatientsTable = () => {
   };
 
   const handleEdit = async (id: number) => {
-    console.log("Edit", id);
+    router.push(`/adminPages/updatePatients/patient?id=${patients[id].PersonID}`);
   }
 
 

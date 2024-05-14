@@ -47,5 +47,30 @@ const getAllPatients = async () => {
     return patients;
 }
 
+const getByID = async (id: number) => {
+    const db = await connectToDB();
+    const user = await db.get('SELECT * FROM Persons WHERE PersonID = ?', [id])
+    await db.close();
+    return user;
+}
 
-module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles };
+const checkUsers = async (username: string, email: string) => {
+    const db = await connectToDB();
+    const users = await db.get("SELECT COUNT(*) AS UserExists FROM Persons WHERE Username = ? OR Email = ?", [username, email])
+    await db.close();
+    return (users.UserExists > 0);
+}
+
+const insertUser = async (FName: string, MName: string, LName: string, Username: string, Email: string, Password: string, PhoneNumber: string, BirthDate: string, Gender: string, Address: string) => {
+    const db = await connectToDB();
+    try {
+        await db.run("INSERT INTO Persons (FirstName, MiddleName, LastName, Username, Email, PasswordHash, PhoneNumber, DateOfBirth, Address, Gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [FName, MName, LName, Username, Email, Password, PhoneNumber, BirthDate, Address, Gender]);
+        await db.run("INSERT INTO PersonRoles (PersonID, RoleID) SELECT PersonID, 1 FROM Persons WHERE Username = ?", [Username]);
+    } catch (error) {
+        return error;
+    }
+    await db.close();
+    return true;
+}
+
+module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser };
