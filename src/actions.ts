@@ -5,7 +5,7 @@ import { getIronSession } from "iron-session";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-const { getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRole, getByID, checkUsers, insertUser } = require('@/dbService');
+const { getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser } = require('@/dbService');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
