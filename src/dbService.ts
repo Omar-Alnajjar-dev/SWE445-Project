@@ -65,7 +65,14 @@ const checkUsers = async (username: string, email: string) => {
     const db = await connectToDB();
     const users = await db.get("SELECT COUNT(*) AS UserExists FROM Persons WHERE Username = ? OR Email = ?", [username, email])
     await db.close();
-    return (users.UserExists > 0);
+    return (users.UserExists);
+}
+
+const checkUserExistBefore = async (username: string, email: string, presonID: string) => {
+    const db = await connectToDB();
+    const users = await db.get("SELECT COUNT(*) AS UserExists FROM Persons WHERE (Username = ? OR Email = ?) AND PersonID != ?", [username, email, presonID])
+    await db.close();
+    return (users.UserExists);
 }
 
 const insertUser = async (FName: string, MName: string, LName: string, Username: string, Email: string, Password: string, PhoneNumber: string, BirthDate: string, Gender: string, Address: string) => {
@@ -91,4 +98,15 @@ const updateRole = async (PersonID: number, RoleID: number) => {
     return true;
 }
 
-module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser, getAllRoles, updateRole };
+const updateUser = async (PersonID: number, FName: string, MName: string, LName: string, Username: string, Email: string, PhoneNumber: string, BirthDate: string, Gender: string, Address: string) => {
+    const db = await connectToDB();
+    try {
+        await db.run("UPDATE Persons SET FirstName = ?, MiddleName = ?, LastName = ?, Username = ?, Email = ?, PhoneNumber = ?, DateOfBirth = ?,Gender = ?, Address = ? WHERE PersonID = ?", [FName, MName, LName, Username, Email, PhoneNumber, BirthDate, Gender, Address, PersonID]);
+    } catch (error) {
+        return error;
+    }
+    await db.close();
+    return true;
+}
+
+module.exports = { connectToDB, getAllUsers, getUser, isAdmin, getAllPatients, getAllUserswithRoles, getByID, checkUsers, insertUser, getAllRoles, updateRole, updateUser, checkUserExistBefore };

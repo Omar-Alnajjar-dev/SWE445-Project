@@ -16,7 +16,7 @@ const RegisterForm = () => {
     repeatPassword: '',
     phoneNumber: '',
     birthDate: '',
-    gender: '',
+    gender: 'male',
     address: '',
   });
 
@@ -157,11 +157,11 @@ const RegisterForm = () => {
       <label htmlFor="gender" className="">Gender</label>
       <fieldset className="w-full flex justify-around items-center mb-3" onChange={handleInputChange}>
         <div>
-          <input id="maleRadio" className="" value="male" type="radio" name="gender" checked />
+          <input id="maleRadio" className="" value="male" type="radio" name="gender" checked={formValues.gender === "male"} />
           <label htmlFor="maleRadio">Male</label>
         </div>
         <div>
-          <input id="femaleRadio" className="" value="female" type="radio" name="gender" />
+          <input id="femaleRadio" className="" value="female" type="radio" name="gender" checked={formValues.gender === "female"} />
           <label htmlFor="femaleRadio">Female</label>
         </div>
       </fieldset>

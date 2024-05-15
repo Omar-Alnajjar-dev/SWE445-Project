@@ -8,6 +8,7 @@ const ModifyForm = () => {
   const [state, formAction] = useFormState<any, FormData>(modifyInfo, undefined);
   const [personId, setPersonId] = useState<number>();
   const [formValues, setFormValues] = useState({
+    PersonId: '',
     fName: '',
     mName: '',
     lName: '',
@@ -20,6 +21,7 @@ const ModifyForm = () => {
   });
 
   const [errors, setErrors] = useState({
+    PersonId: '',
     fName: '',
     mName: '',
     lName: '',
@@ -111,6 +113,7 @@ const ModifyForm = () => {
       const response = await getUserByID(parseInt(urlParams.get("id") || ""));
       // get the values in the response and set them to the formValues
       setFormValues({
+        PersonId: (urlParams.get("id") || ""),
         fName: response.FirstName,
         mName: response.MiddleName,
         lName: response.LastName,
