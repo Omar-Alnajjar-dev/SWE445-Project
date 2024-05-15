@@ -264,6 +264,14 @@ export const updateRoles = async (users: any, roles: any) => {
   }
 };
 
+export const modifyInfo = async (
+  revState: { error: undefined | string },
+  formData: FormData
+) => {
+  const session = await getSession();
+  console.log(formData);
+};
+
 
 // export const changePremium = async () => {
 //   const session = await getSession();
