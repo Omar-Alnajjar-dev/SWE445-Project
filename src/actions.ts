@@ -88,7 +88,6 @@ export const register = async (
   formData: FormData
 ) => {
   const session = await getSession();
-  console.log(formData);
 
   const formFName = formData.get("fName") as string;
   const formMName = formData.get("mName") as string;
@@ -269,8 +268,6 @@ export const modifyInfo = async (
   formData: FormData
 ) => {
   const session = await getSession();
-  console.log("Updating User back end");
-  console.log(formData);
 
   const formPersonId = formData.get("PersonId") as string;
   const formFName = formData.get("fName") as string;

@@ -108,8 +108,6 @@ const RegisterForm = () => {
     if (!/^[a-zA-Z0-9\s]+$/.test(formValues.address)) {
       newErrors.address = 'Address must contain only letters and numbers!';
     }
-    console.log("Errors");
-    console.log(newErrors);
 
 
     setErrors(newErrors);
@@ -118,7 +116,6 @@ const RegisterForm = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(errors);
     const isValid = validateForm();
     if (isValid === true) {
       const formData = new FormData();

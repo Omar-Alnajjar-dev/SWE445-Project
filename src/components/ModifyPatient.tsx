@@ -19,7 +19,6 @@ const RegisterForm = () => {
   });
 
   useEffect(() => {
-    console.log(form);
   }, []);
 
   const fetchDate = async () => {

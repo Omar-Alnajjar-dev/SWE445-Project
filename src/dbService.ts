@@ -50,7 +50,6 @@ const getAllPatients = async () => {
     const db = await connectToDB();
     const patients = await db.all("SELECT * FROM Persons p JOIN PersonRoles pr ON p.PersonID = pr.PersonID JOIN Roles r ON pr.RoleID = r.RoleID WHERE r.RoleName = 'Patient'")
     await db.close();
-    console.log("patients were fetched");
     return patients;
 }
 

@@ -91,7 +91,6 @@ const ModifyForm = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(errors);
     const isValid = validateForm();
     if (isValid === true) {
       const formData = new FormData();
